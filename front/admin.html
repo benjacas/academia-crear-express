@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin — CREAR</title>
+  <link rel="stylesheet" href="./recursos/css/admin.css">
+</head>
+<body>
+
+<header>
+  <h1>Panel de Administracion — Escuela de Danzas CREAR</h1>
+  <a href="/">← Volver al sitio</a>
+</header>
+
+<main>
+
+  <div id="feedback"></div>
+
+  <div class="card">
+    <h2 id="tituloForm">Nueva clase</h2>
+    <form id="formProducto">
+      <input type="hidden" id="editId">
+
+      <div>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" placeholder="Ej: Danza Clasica" required>
+      </div>
+
+      <div>
+        <label for="nivel">Nivel</label>
+        <select id="nivel">
+          <option value="">Sin nivel asignado</option>
+          <option value="Inicial">Inicial</option>
+          <option value="Intermedio">Intermedio</option>
+          <option value="Avanzado">Avanzado</option>
+        </select>
+      </div>
+
+      <div class="full">
+        <label for="descripcion">Descripcion</label>
+        <textarea id="descripcion" placeholder="Descripcion breve de la clase..."></textarea>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="btn-primary" id="btnGuardar">Guardar</button>
+        <button type="button" class="btn-cancel" id="btnCancelar" style="display:none">Cancelar</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h2>Clases registradas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Nivel</th>
+          <th>Descripcion</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla">
+        <tr><td colspan="5" class="tabla-vacia">Cargando...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+<script src="./recursos/js/admin.js"></script>
+
+</body>
+</html>
