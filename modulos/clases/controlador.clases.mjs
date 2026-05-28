@@ -30,11 +30,11 @@ export async function obtenerClasePorId(req, res) {
 // ALTA — POST /api/clases
 export async function crearClase(req, res) {
   try {
-    const { nombre, descripcion, nivel } = req.body
+    const { nombre, descripcion, nivel, imagen } = req.body
     if (!nombre) {
       return res.status(400).json({ error: 'nombre es obligatorio' })
     }
-    const nuevo = await ClasesModelo.crearClase({ nombre, descripcion, nivel })
+    const nuevo = await ClasesModelo.crearClase({ nombre, descripcion, nivel, imagen })
     res.status(201).json(nuevo)
   } catch (error) {
     res.status(500).json({ error: error.message })
@@ -52,11 +52,12 @@ export async function actualizarClase(req, res) {
     if (!existe) {
       return res.status(404).json({ error: `No se encontro la clase con id ${id}` })
     }
-    const { nombre, descripcion, nivel } = req.body
+    const { nombre, descripcion, nivel, imagen } = req.body
     const actualizado = await ClasesModelo.actualizarClase(id, {
-      nombre: nombre !== undefined ? nombre : existe.nombre,
+      nombre:      nombre      !== undefined ? nombre      : existe.nombre,
       descripcion: descripcion !== undefined ? descripcion : existe.descripcion,
-      nivel: nivel !== undefined ? nivel : existe.nivel,
+      nivel:       nivel       !== undefined ? nivel       : existe.nivel,
+      imagen:      imagen      !== undefined ? imagen      : existe.imagen,
     })
     res.json(actualizado)
   } catch (error) {

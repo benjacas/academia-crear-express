@@ -2,38 +2,50 @@ import pool from '../../conexiones/bd/conexion.bd.mjs';
 
 // Obtener todas las clases
 const obtenerTodas = async () => {
-  const resultado = await pool.query('SELECT * FROM clases ORDER BY id ASC')
+  const resultado = await pool.query(`
+    SELECT c.*,
+           ARRAY_REMOVE(ARRAY_AGG(h.horario ORDER BY h.id), NULL) AS horarios
+    FROM clases c
+    LEFT JOIN horarios h ON h.id_clase = c.id
+    GROUP BY c.id
+    ORDER BY c.id ASC
+  `)
   return resultado.rows
 }
 
 // Obtener una clase por ID
 const obtenerPorId = async (id) => {
   const resultado = await pool.query(
-    'SELECT * FROM clases WHERE id = $1',
+    `SELECT c.*,
+            ARRAY_REMOVE(ARRAY_AGG(h.horario ORDER BY h.id), NULL) AS horarios
+     FROM clases c
+     LEFT JOIN horarios h ON h.id_clase = c.id
+     WHERE c.id = $1
+     GROUP BY c.id`,
     [id]
   )
   return resultado.rows[0]
 }
 
 // Crear una nueva clase
-const crearClase = async ({ nombre, descripcion, nivel }) => {
+const crearClase = async ({ nombre, descripcion, nivel, imagen }) => {
   const resultado = await pool.query(
-    `INSERT INTO clases (nombre, descripcion, nivel)
-     VALUES ($1, $2, $3)
+    `INSERT INTO clases (nombre, descripcion, nivel, imagen)
+     VALUES ($1, $2, $3, $4)
      RETURNING *`,
-    [nombre, descripcion, nivel]
+    [nombre, descripcion, nivel, imagen || null]
   )
   return resultado.rows[0]
 }
 
 // Actualizar una clase existente
-const actualizarClase = async (id, { nombre, descripcion, nivel }) => {
+const actualizarClase = async (id, { nombre, descripcion, nivel, imagen }) => {
   const resultado = await pool.query(
     `UPDATE clases
-     SET nombre = $1, descripcion = $2, nivel = $3
-     WHERE id = $4
+     SET nombre = $1, descripcion = $2, nivel = $3, imagen = $4
+     WHERE id = $5
      RETURNING *`,
-    [nombre, descripcion, nivel, id]
+    [nombre, descripcion, nivel, imagen, id]
   )
   return resultado.rows[0]
 }
