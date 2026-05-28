@@ -1,14 +1,12 @@
 import pg from 'pg'
- //hacer consultas simples
+import 'dotenv/config'
 
- const pool = new pg.Pool({
-    host: 'localhost',
-    user: 'root',
-    password: 'pass',
-    database: 'crear',
-    port: 5432
- })
+const pool = new pg.Pool({
+  host:     process.env.DB_HOST     || 'localhost',
+  user:     process.env.DB_USER     || 'root',
+  password: process.env.DB_PASSWORD || 'pass',
+  database: process.env.DB_NAME     || 'crear',
+  port:     Number(process.env.DB_PORT) || 5432,
+})
 
- //exportamos para hacerlo vicible desde otro modulo
- //default es nonombrado -- > se importa en las llaves
- export default pool
+export default pool

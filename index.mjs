@@ -1,29 +1,27 @@
-import express from 'express';
+import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
 
-//importar las rutas del modulo productos
-import rutasModuloProductos from './modulos/productos/rutas.productos.mjs';
+// Rutas
+import rutasClases   from './modulos/clases/rutas.clases.mjs'
+import rutasContacto from './modulos/contacto/rutas.contacto.mjs'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname  = path.dirname(__filename)
 
+const app    = express()
+const PUERTO = 2026
 
-import path from 'path';
-import { fileURLToPath } from 'url';
+app.use(express.json())
 
-import clasesRoutes from './routes/clases.routes.mjs';
+// Servir el front
+app.use(express.static(__dirname + '/front'))
 
-const app = express();
+// ── Rutas de la API 
 
-//le avisamos a express que use las rutas del modulo pñroductos
-app.use(rutasModuloProductos);
-
-const PUERTO = 2026;
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.use(express.json());
-app.use(express.static(__dirname + '/front'));
-
-app.use('/api/clases', clasesRoutes);
+// API publica — solo lectura para el sitio web 
+app.use('/api/clases',   rutasClases)
+app.use('/api/contacto', rutasContacto)
 
 app.listen(PUERTO, () => {
     console.log(`Servidor en http://localhost:${PUERTO}`);
