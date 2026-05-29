@@ -8,7 +8,7 @@ function msg(texto, tipo = 'ok') {
   setTimeout(() => { el.textContent = ''; el.className = '' }, 3000)
 }
 
-// ── Listar ────────────────────────────────────────────────────
+//  Listar 
 async function cargar() {
   try {
     const res    = await fetch(API)
@@ -16,7 +16,7 @@ async function cargar() {
     const tbody  = $('tabla')
 
     if (!clases.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="tabla-vacia">No hay clases cargadas.</td></tr>'
+      tbody.innerHTML = '<tr><td colspan="5" class="tabla-vacia">No hay clases cargadas.</td></tr>'
       return
     }
 
@@ -37,7 +37,7 @@ async function cargar() {
   }
 }
 
-// ── Editar ────────────────────────────────────────────────────
+//  Editar 
 async function editar(id) {
   try {
     const res  = await fetch(`${API}/${id}`)
@@ -57,8 +57,8 @@ async function editar(id) {
   }
 }
 
-// ── Guardar (crear o actualizar) ──────────────────────────────
-$('formProducto').addEventListener('submit', async (e) => {
+//  Guardar 
+$('formClase').addEventListener('submit', async (e) => {
   e.preventDefault()
   const id   = $('editId').value
   const body = {
@@ -83,7 +83,7 @@ $('formProducto').addEventListener('submit', async (e) => {
   }
 })
 
-// ── Eliminar ──────────────────────────────────────────────────
+// Eliminar 
 async function eliminar(id) {
   if (!confirm(`¿Eliminar la clase #${id}?`)) return
   try {
@@ -97,11 +97,11 @@ async function eliminar(id) {
   }
 }
 
-// ── Cancelar edicion ──────────────────────────────────────────
+// Cancelar edicion 
 $('btnCancelar').addEventListener('click', resetForm)
 
 function resetForm() {
-  $('formProducto').reset()
+  $('formClase').reset()
   $('editId').value              = ''
   $('tituloForm').textContent    = 'Nueva clase'
   $('btnGuardar').textContent    = 'Guardar'

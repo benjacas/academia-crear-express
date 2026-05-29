@@ -1,5 +1,5 @@
 -- Estructura y datos reales de la Escuela de Danzas CREAR
--- Ejecutar con: psql -U postgres -d crear -f crear.sql
+-- Ejecutar con: psql -U root -d crear -f crear.sql
 
 CREATE TABLE clases (
     id          SERIAL PRIMARY KEY,

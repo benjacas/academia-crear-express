@@ -9,7 +9,7 @@ async function cargarDatos() {
     const respuesta = await fetch('/api/clases');
 
     if (!respuesta.ok) {
-      throw new Error("No se pudo cargar el archivo JSON");
+      throw new Error("No se pudieron cargar las clases");
     }
 
     const clases = await respuesta.json();
