@@ -8,7 +8,7 @@ function msg(texto, tipo = 'ok') {
   setTimeout(() => { el.textContent = ''; el.className = '' }, 3000)
 }
 
-//  Listar 
+// Listar
 async function cargar() {
   try {
     const res    = await fetch(API)
@@ -37,7 +37,7 @@ async function cargar() {
   }
 }
 
-//  Editar 
+// Editar
 async function editar(id) {
   try {
     const res  = await fetch(`${API}/${id}`)
@@ -47,6 +47,7 @@ async function editar(id) {
     $('editId').value              = data.id
     $('nombre').value              = data.nombre
     $('nivel').value               = data.nivel ?? ''
+    $('horarios').value = data.horarios ? data.horarios.join(', ') : ''
     $('descripcion').value         = data.descripcion ?? ''
     $('tituloForm').textContent    = `Editando clase #${data.id}`
     $('btnGuardar').textContent    = 'Actualizar'
@@ -57,21 +58,28 @@ async function editar(id) {
   }
 }
 
-//  Guardar 
+// Guardar
 $('formClase').addEventListener('submit', async (e) => {
   e.preventDefault()
-  const id   = $('editId').value
-  const body = {
-    nombre:      $('nombre').value.trim(),
-    nivel:       $('nivel').value || null,
-    descripcion: $('descripcion').value.trim() || null,
+  const id = $('editId').value
+
+  // Usamos FormData en lugar de JSON porque el form puede incluir un archivo de imagen
+  const formData = new FormData()
+  formData.append('nombre',      $('nombre').value.trim())
+  formData.append('nivel',       $('nivel').value || '')
+  formData.append('horarios', $('horarios').value.trim())
+  formData.append('descripcion', $('descripcion').value.trim())
+
+  // Solo agregamos la imagen si el usuario seleccionó una
+  const archivoImagen = $('imagen').files[0]
+  if (archivoImagen) {
+    formData.append('imagen', archivoImagen)
   }
 
   try {
     const res  = await fetch(id ? `${API}/${id}` : API, {
-      method:  id ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(body),
+      method: id ? 'PUT' : 'POST',
+      body:   formData,
     })
     const data = await res.json()
     if (!res.ok) throw new Error(data.error)
@@ -83,7 +91,7 @@ $('formClase').addEventListener('submit', async (e) => {
   }
 })
 
-// Eliminar 
+// Eliminar
 async function eliminar(id) {
   if (!confirm(`¿Eliminar la clase #${id}?`)) return
   try {
@@ -97,16 +105,17 @@ async function eliminar(id) {
   }
 }
 
-// Cancelar edicion 
+// Cancelar edición
 $('btnCancelar').addEventListener('click', resetForm)
 
 function resetForm() {
   $('formClase').reset()
   $('editId').value              = ''
+  $('horarios').value = ''
   $('tituloForm').textContent    = 'Nueva clase'
   $('btnGuardar').textContent    = 'Guardar'
   $('btnCancelar').style.display = 'none'
 }
 
-// Carga inicial
+// Carga
 cargar()

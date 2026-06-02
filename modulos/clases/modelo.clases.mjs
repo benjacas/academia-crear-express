@@ -68,4 +68,17 @@ const obtenerPorNivel = async (nivel) => {
   return resultado.rows
 }
 
-export default { obtenerTodas, obtenerPorId, crearClase, actualizarClase, eliminarClase, obtenerPorNivel }
+const reemplazarHorarios = async (idClase, horarios) => {
+  // Borra los horarios anteriores de esa clase
+  await pool.query('DELETE FROM horarios WHERE id_clase = $1', [idClase])
+
+  // Inserta cada horario nuevo
+  for (const horario of horarios) {
+    await pool.query(
+      'INSERT INTO horarios (horario, id_clase) VALUES ($1, $2)',
+      [horario.trim(), idClase]
+    )
+  }
+}
+
+export default { obtenerTodas, obtenerPorId, crearClase, actualizarClase, eliminarClase, obtenerPorNivel, reemplazarHorarios}
