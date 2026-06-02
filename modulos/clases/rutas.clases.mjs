@@ -1,5 +1,44 @@
 import { Router } from 'express'
-import {obtenerClases,obtenerClasesPorNivel,obtenerClasePorId,crearClase,actualizarClase,eliminarClase,} from './controlador.clases.mjs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import multer from 'multer'
+import {
+  obtenerClases,
+  obtenerClasesPorNivel,
+  obtenerClasePorId,
+  crearClase,
+  actualizarClase,
+  eliminarClase,
+} from './controlador.clases.mjs'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname  = path.dirname(__filename)
+
+// Configuración de Multer: dónde y cómo guardar las imágenes
+const almacenamiento = multer.diskStorage({
+
+  // Carpeta destino dentro del proyecto
+  destination: (req, archivo, cb) => {
+    cb(null, path.join(__dirname, '../../front/recursos/imagenes'))
+  },
+
+  // Nombre: timestamp + nombre original para evitar duplicados
+  filename: (req, archivo, cb) => {
+    cb(null, Date.now() + '-' + archivo.originalname)
+  }
+})
+
+// Solo acepta archivos de imagen (jpg, png, webp, etc.)
+const filtroArchivo = (req, archivo, cb) => {
+  if (archivo.mimetype.startsWith('image/')) {
+    cb(null, true)
+  } else {
+    cb(new Error('Solo se permiten imágenes'), false)
+  }
+}
+
+// Límite de 5MB por imagen
+const subida = multer({ storage: almacenamiento, fileFilter: filtroArchivo, limits: { fileSize: 5 * 1024 * 1024 } })
 
 const router = Router()
 
@@ -16,7 +55,7 @@ const router = Router()
  *       '500':
  *         description: Error interno del servidor
  */
-router.get('/',               obtenerClases)
+router.get('/', obtenerClases)
 
 /**
  * @swagger
@@ -37,7 +76,7 @@ router.get('/',               obtenerClases)
  *       '500':
  *         description: Error interno del servidor
  */
-router.get('/nivel/:nivel',   obtenerClasesPorNivel)
+router.get('/nivel/:nivel', obtenerClasesPorNivel)
 
 /**
  * @swagger
@@ -60,7 +99,7 @@ router.get('/nivel/:nivel',   obtenerClasesPorNivel)
  *       '500':
  *         description: Error interno del servidor
  */
-router.get('/:id',            obtenerClasePorId)
+router.get('/:id', obtenerClasePorId)
 
 /**
  * @swagger
@@ -72,7 +111,7 @@ router.get('/:id',            obtenerClasePorId)
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             required:
@@ -84,6 +123,9 @@ router.get('/:id',            obtenerClasePorId)
  *                 type: string
  *               nivel:
  *                 type: string
+ *               imagen:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       '201':
  *         description: Clase creada
@@ -92,7 +134,8 @@ router.get('/:id',            obtenerClasePorId)
  *       '500':
  *         description: Error interno del servidor
  */
-router.post('/',              crearClase)
+// upload.single('imagen') intercepta el archivo antes de que llegue al controlador
+router.post('/', subida.single('imagen'), crearClase)
 
 /**
  * @swagger
@@ -110,7 +153,7 @@ router.post('/',              crearClase)
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -120,6 +163,9 @@ router.post('/',              crearClase)
  *                 type: string
  *               nivel:
  *                 type: string
+ *               imagen:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       '200':
  *         description: Clase actualizada
@@ -128,7 +174,8 @@ router.post('/',              crearClase)
  *       '500':
  *         description: Error interno del servidor
  */
-router.put('/:id',            actualizarClase)
+// upload.single('imagen') intercepta el archivo antes de que llegue al controlador
+router.put('/:id', subida.single('imagen'), actualizarClase)
 
 /**
  * @swagger
@@ -151,6 +198,6 @@ router.put('/:id',            actualizarClase)
  *       '500':
  *         description: Error interno del servidor
  */
-router.delete('/:id',         eliminarClase)
+router.delete('/:id', eliminarClase)
 
 export default router
