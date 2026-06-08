@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Iniciar sesión — CREAR Admin</title>
+  <!-- Podés reusar tu estilos.css o hacerle uno propio -->
+  <link rel="stylesheet" href="./recursos/css/admin.css">
+</head>
+<body>
+
+  <header>
+    <h1>Panel Admin — Escuela de Danzas CREAR</h1>
+  </header>
+
+  <main>
+    <div class="card" style="max-width: 400px; margin: 4rem auto;">
+      <h2>Iniciar sesión</h2>
+
+      <!-- 
+        El action apunta a la ruta POST /autenticar del backend.
+        method="post" porque estamos mandando credenciales (nunca GET).
+      -->
+      <form action="/autenticar" method="post">
+
+        <div>
+          <label for="usuario">Usuario</label>
+          <input type="text" id="usuario" name="usuario" required>
+        </div>
+
+        <div>
+          <label for="clave">Contraseña</label>
+          <input type="password" id="clave" name="clave" required>
+        </div>
+
+        <!-- Mensaje de error si el login falla (lo pasamos por query param) -->
+        <p id="error-msg" style="color:red; display:none"></p>
+
+        <div class="btn-row">
+          <button type="submit" class="btn-primary">Entrar</button>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <script>
+    // Si el servidor nos redirige a /login?error=1, mostramos el mensaje
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('error')) {
+      const el = document.getElementById('error-msg')
+      el.textContent = 'Usuario o contraseña incorrectos'
+      el.style.display = 'block'
+    }
+  </script>
+
+</body>
+</html>
