@@ -107,3 +107,38 @@ http://localhost:2026/api-docs
 Disponible en:
 http://localhost:2026/admin.html
 
+
+## Autenticación y seguridad
+
+El panel de administración está protegido con autenticación por cookies firmadas (cookie-parser).
+
+### Rutas de autenticación
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| POST | /autenticar | Iniciar sesión |
+| GET | /cerrar-sesion | Cerrar sesión |
+
+### Variables de entorno nuevas
+
+Agregar al `.env`:
+
+```env
+COOKIE_SECRETO=unaFraseLargaYSecretaParaFirmar
+ADMIN_USUARIO=admin
+ADMIN_CLAVE=tu_clave_segura
+```
+
+- Login: http://localhost:2026/login
+- Admin: http://localhost:2026/admin (redirige al login si no hay sesión activa)
+
+### Módulo agregado
+
+```
+modulos/
+  └── autenticacion/
+        ├── autenticacion.mjs        → lógica de login y logout
+        ├── middleware.autenticacion.mjs  → verifica la cookie antes de entrar al admin
+        └── rutas.autenticacion.mjs  → define las rutas /autenticar y /cerrar-sesion
+```
+
