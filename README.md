@@ -142,3 +142,8 @@ modulos/
         └── rutas.autenticacion.mjs  → define las rutas /autenticar y /cerrar-sesion
 ```
 
+1. El frontend hace POST /api/auth/login con { usuario, password }
+2. El backend compara la contraseña con el HASH guardado (bcrypt)
+3. Si coincide, genera un TOKEN (JWT) y se lo manda al frontend
+4. El frontend guarda ese token y lo manda en cada request al admin
+
