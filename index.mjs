@@ -1,33 +1,27 @@
-import express from 'express';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import express from 'express'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './swagger.mjs';
 
-const app = express();
-const PUERTO = 3000;
+// Rutas
+import rutasClases   from './modulos/clases/rutas.clases.mjs'
+import rutasContacto from './modulos/contacto/rutas.contacto.mjs'
 
-const nombreArchivo = fileURLToPath(import.meta.url);
-const url = path.dirname(nombreArchivo);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname  = path.dirname(__filename)
 
-// middleware JSON
-app.use(express.json());
+const app    = express()
+const PUERTO = 2026
 
-app.use(express.static(url + '/front'));
+app.use(express.json())
 
-// middleware de prueba
-app.use((req, res, next) => {
-    console.log(`Petición: ${req.method} ${req.url}`);
-    next();
-});
+// Servir el front
+app.use(express.static(__dirname + '/front'))
 
-// POST contacto
-app.post('/', (req, res) => {
-
-    console.log(req.body);
-
-    res.status(201).json({
-        mensaje: 'Mensaje recibido'
-    });
-});
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+app.use('/api/clases',   rutasClases)
+app.use('/api/contacto', rutasContacto)
 
 app.listen(PUERTO, () => {
     console.log(`Servidor en http://localhost:${PUERTO}`);

@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.mjs",
   "scripts": {
+<<<<<<< HEAD
    "dev": "node --watch index.mjs",
   "start": "node index.mjs"
+=======
+    "dev": "nodemon index.mjs",
+    "start": "node index.mjs"
+>>>>>>> c32e8cab04cf811e7b40f05315234eec01e78574
   },
   "repository": {
     "type": "git",
@@ -14,12 +19,28 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+<<<<<<< HEAD
   "type": "commonjs",
+=======
+  "type": "module",
+>>>>>>> c32e8cab04cf811e7b40f05315234eec01e78574
   "bugs": {
     "url": "https://github.com/mbordon1/escueladedanzascrear/issues"
   },
   "homepage": "https://github.com/mbordon1/escueladedanzascrear#readme",
   "dependencies": {
+<<<<<<< HEAD
     "express": "^5.2.1"
+=======
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "multer": "^2.1.1",
+    "pg": "^8.21.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+>>>>>>> c32e8cab04cf811e7b40f05315234eec01e78574
   }
 }
