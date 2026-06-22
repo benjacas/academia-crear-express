@@ -10,11 +10,6 @@ export async function autenticar(req, res) {
   const claveCorrecto   = process.env.ADMIN_CLAVE
 
 
-  if (usuario !== usuarioCorrecto || clave !== claveCorrecto) {
-    return res.redirect('/login?error=1')
-  }
-
-
   // Si no coinciden, redirigimos al login con parámetro de error
   if (usuario !== usuarioCorrecto || clave !== claveCorrecto) {
     return res.redirect('/login?error=1')
