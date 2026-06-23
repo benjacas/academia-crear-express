@@ -38,8 +38,8 @@ app.get('/admin', verificarSesion, (req, res) => {
     res.sendFile(path.join(__dirname, 'front/admin.html'))
 })
 
-// API — protegida
-app.use('/api/clases',   verificarSesion, rutasClases)
+
+app.use('/api/clases', rutasClases)
 app.use('/api/contacto', verificarSesion, rutasContacto)
 
 // Front público (al final)
