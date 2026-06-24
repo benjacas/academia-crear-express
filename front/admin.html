@@ -79,7 +79,13 @@
 
   </main>
 
-  <script src="./recursos/js/admin.js"></script>
+  <script
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('expired') === '1') {
+      alert('Tu sesión expiró. Por favor ingresá nuevamente.')
+    }
+    src="./recursos/js/admin.js">
+  </script>
 
 </body>
 

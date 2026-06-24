@@ -10,16 +10,19 @@ export function verificarSesion(req, res, next) {
     return res.redirect('/login')
   }
 
-  // Verificamos la firma y la expiración del JWT
   jwt.verify(token, process.env.JWT_FIRMA, (error, decoded) => {
     if (error) {
-      // El token expiró o fue manipulado
       const esApi = req.originalUrl.startsWith('/api/')
       if (esApi) return res.status(401).json({ error: 'Token inválido o expirado' })
+
+      // Si el token expiró, avisamos al login con parámetro
+      if (error.name === 'TokenExpiredError') {
+        return res.redirect('/login?expired=1')
+      }
+
       return res.redirect('/login')
     }
 
-    // Token válido — guardamos los datos del usuario en req para usarlos después
     req.usuario = decoded
     next()
   })
